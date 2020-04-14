@@ -9,10 +9,11 @@
  * @author Tenzin Woesel
  * @13th Aug, 2020
  */
+package com.tenzin.guessnumber;
 import  java.util.Scanner;
 import java.util.Random;
 
-public class NewClass{
+public class Guess{
 	
 	public static void main(String[]args){
 		

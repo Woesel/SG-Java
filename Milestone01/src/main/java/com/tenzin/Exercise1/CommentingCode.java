@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tenzin.Exercise1;
+package com.tenzin.exercise1;
 
 /**
  *
@@ -21,7 +21,7 @@ public class CommentingCode {
         System.out.println("Comments howver ...");//do not execute!
         
         //comments can be on their own line
-        System.out.println("Comments however.."); //or they can share like this
+        System.out.println(".."); //or they can share like this
         
         //However if you put the // BEFORE a line of code
         System.out.println("Then it is considered a comment");

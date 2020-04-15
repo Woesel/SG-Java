@@ -7,7 +7,7 @@ package com.tenzin.exercise2;
 
 /**
  *
- * @author ttibe
+ * @author Tenzin Woesel
  */
 public class MoreBucketsMoreFun {
     

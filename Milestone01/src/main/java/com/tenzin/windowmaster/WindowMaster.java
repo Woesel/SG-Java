@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author ttibe
+ * @author Tenzin Woesel
  */
 public class WindowMaster {
     public static void main(String[]args){

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tenzin.WindowMaster;
+package com.tenzin.windowmaster;
 
 import java.util.Scanner;
 
 /**
  *
- * @author ttibe
+ * @author Tenzin Woesel
  */
 public class WindowMaster {
     public static void main(String[]args){

@@ -1,0 +1,3 @@
+KurKure::3.99::10
+Some::1.99::2
+Something::2.99::10

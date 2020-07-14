@@ -1,0 +1,137 @@
+@startuml
+package View{
+  class userInterface{
+    -io: UserIO
+    +chooseItemToBuy(): String
+    +displayErrorMessage(): void {errorMsg: String}
+    +displayExitBanner():void
+    +displayItemList(): void {itemList: List<VendingMachineItems>}
+    +displayItemsAvailableBanner(): void
+    +displayUnknownCommandBanner(): void
+    +printMenuAndGetSelection(): int
+    +getItemNameFromUser(): String
+    +displayPurchaseSuccessful(): void
+  }
+  interface UserIO{
+    +print(): void {msg: String}
+    +readBigDecimal(): BigDecimal {prompt String}
+    +readInt(): int {prompt: String}
+    +readInt(): int {prompt: String, min: int, max : int}
+    +readString(): String {prompt: String}
+  }
+  UserIO <|.down. UserIOConsoleImpl: Implements
+  userInterface o--|> UserIO: io
+  
+}
+package Controller{
+VendingMachineController o--|> userInterface
+  class VendingMachineController{
+    -view: VendingMachineView
+    -service: VendingMachineService;
+    +view: VendingMachineView
+    +run(): void
+    -getMenuSelection: int
+    -getAllItems(): void
+    -purchaseItem(): void
+    -unknownCommand(): void
+  }
+}
+package Service{
+
+    class Change{
+    numOfCents: int
+	numOfNickels: int
+	numOfDimes: int
+	numOfQuarters: int
+	+getCent(): numOfcents
+	+getNickel(): int
+	+getDime(): int
+	+getQuarter(): int
+	+setNumOfCents: int {numOfcents: int}
+	+setNumOfNickels: int {numOfNickels: int}
+	+setNumOfDimes: int {numOfDimes: int}
+	+setNumOfQuarters: int {numOfQuarters: int}
+	+calculateChange(): void {balance: int}
+    }
+    
+    enum ChangeAmount{
+    CENT
+    NICKEL
+	DIME
+	QUARTER
+	+price: int
+	+getPrice(): int
+        
+    }
+
+  VendingMachineController o--|> VendingMachineService: service
+  interface VendingMachineService{
+    +getAllItems(): List <VendingMachineItems>
+    +purchasedItem(): VendingMachineItems {itemName: String, insertedAmount: BigDecimal}
+    +calculateChange(): Map {itemCost: BigDecimal, insertedAmount: BigDecimal}
+    
+  }
+  class VendingMachineServiceImpl{
+	+auditeDao: VendingMachineAuditDao
+	+dao: VendingMachineDao
+	+getAllItems(): List<VendingMachineItems>
+	+calculateChange(): Map {itemCost: BigDecimal, insertedAmount: BigDecimal}
+	+purchaseItem(): VendingMachineItems {itemName: String, insertedAmount: BigDecimal}
+  }
+ VendingMachineService <|.. VendingMachineServiceImpl: implements
+}
+
+package DAO{
+	VendingMachineServiceImpl o--|> VendingMachineDao: dao
+	VendingMachineServiceImpl o--|> VendingMachineAuditDao: auditDao
+  interface VendingMachineDao{
+    +addItems(): VendingMachineItems {itemName: String, item: VendingMachineItems}
+    +getAllItems(): List<VendingMachineItems>
+    +getSelectedItem(): VendingMachineItem {itemName: String, itemCost : BigDecimal, numOfItems : int}
+}
+
+  class VendingMachineDaoFileImpl <VendingMachineDao>{
+     +DELIMETER: String
+    -INVENTORY_FILE: String
+    -vm: Map<String,VendingMachineItems>
+    +addItem(): VendingMachineItems {itemName: String, item: VendingMachineItems}
+    +getAllItems(): List<VendingMachineItems>
+    +getSelectedItem(): VendingMachineItem {itemName: String, itemCost : BigDecimal, numOfItems : int}
+    -items: HashMap<String, VendingMachineItem>
+    -writeInventory(): void
+    -loadInventory(): void
+    -marshallItem(): String {anItem: VendingMachineItems}
+    -unmarshallItem(): VendingMachineItems {itemAsText: String} 
+  }
+  
+  interface VendingMachineAuditDao{
+    +writeAuditEntry(): void {String entry}
+  }
+  
+  class VendingMachineAuditDaoImpl<VendingMachineAuditDao>{
+	+AUDIT_FILE: String
+	+writeAuditEntry(): void {String entry}
+  }
+  
+  VendingMachineDao <|.down. VendingMachineDaoFileImpl: Implements
+  VendingMachineAuditDao <|.down. VendingMachineAuditDaoImpl: Implements
+    
+}
+package DTO{
+    
+  class VendingMachineItems{
+    -itemName: String
+    -itemCost: BigDecimal
+    -numOfItems: int
+Constructor 
+    +getItemName(): String
+    +setItemName(): void {itemName: String}
+    +getItemCost(): BigDecimal
+    +setItemCost(): void {itemCost: BigDecimal}
+    +getNumOfItems(): int
+    +setNumOfItems(): void {numOfItems: int}
+  }
+}
+
+
+@enduml

@@ -1,0 +1,4 @@
+com\tenzin\vendingmachine\service\VendingMachineServiceImplTest.class
+com\tenzin\vendingmachine\service\VendingMachineDaoStubImpl.class
+com\tenzin\vendingmachine\dao\VendingMachineDaoFileImplTest.class
+com\tenzin\vendingmachine\service\VendingMachineAudiDaoStubImpl.class

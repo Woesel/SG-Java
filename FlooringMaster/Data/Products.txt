@@ -1,0 +1,5 @@
+AluminiumZ,2.222,22.9
+Gold,2.22,1.79
+Aluminium1,2.979,22.9
+Carpet,2.25,2.10
+Aluminium3,2.999,22.9

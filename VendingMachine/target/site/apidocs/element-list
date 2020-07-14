@@ -1,0 +1,6 @@
+com.tenzin.vendingmachine
+com.tenzin.vendingmachine.controller
+com.tenzin.vendingmachine.dao
+com.tenzin.vendingmachine.dto
+com.tenzin.vendingmachine.service
+com.tenzin.vendingmachine.ui

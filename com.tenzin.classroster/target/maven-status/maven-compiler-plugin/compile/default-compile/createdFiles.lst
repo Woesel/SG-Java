@@ -1,0 +1,15 @@
+com\tenzin\classroster\ui\UserIOConsoleImpl.class
+com\tenzin\classroster\dao\ClassRosterDaoFileImpl.class
+com\tenzin\classroster\service\ClassRosterDataValidationException.class
+com\tenzin\classroster\dao\ClassRosterAuditDaoFileImpl.class
+com\tenzin\classroster\service\ClassRosterServiceLayerImpl.class
+com\tenzin\classroster\controller\ClassRosterController.class
+com\tenzin\classroster\dao\ClassRosterAuditDao.class
+com\tenzin\classroster\dao\ClassRosterPersistenceException.class
+com\tenzin\classroster\dto\Student.class
+com\tenzin\classroster\ui\ClassRosterView.class
+com\tenzin\classroster\App.class
+com\tenzin\classroster\dao\ClassRosterDao.class
+com\tenzin\classroster\ui\UserIO.class
+com\tenzin\classroster\service\ClassRosterDuplicateIdException.class
+com\tenzin\classroster\service\ClassRosterServiceLayer.class

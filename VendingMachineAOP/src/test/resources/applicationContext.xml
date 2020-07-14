@@ -1,0 +1,44 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/mvc
+          http://www.springframework.org/schema/mvc/spring-mvc.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/aop  
+          http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+ 
+    <!-- Bean definitions go here -->
+    <bean id= "myIo" class = "com.tenzin.vendingmachine.ui.UserIOConsoleImpl"/>
+   
+    <bean id= "myView" class = "com.tenzin.vendingmachine.ui.VendinMachineView"/>
+        <constructor-arg ref = "myIo"/>
+    </bean>
+   
+    <bean id= "myDao" class = "com.tenzin.vendingmachine.dao.VendingMachineDaoImpl"/>
+    <bean id="myDao" 
+          class="com.tenzin.vendingmachine.dao.VendingMachineDaoFileImpl"/>
+   
+    <bean id="myAuditDao" 
+          class="com.tenzin.vendingmachine.dao.VendingMachineDaoAuditDaoFileImpl"/>
+   <bean id = "myService" class = "com.tenzin.vendingmachine.service.VendingMachineServiceImpl();"/>
+          class="com.tenzin.dvd.service.DVDServiceLayerImpl">
+          <constructor-arg ref= "myDao"/>
+          <constructor-arg ref = "myAuditDao"/>
+    </bean>
+   
+    <bean id="controller" 
+          class="com.tenzin.vendingmachine.controller.VendingMachineController">
+        <constructor-arg ref="myService"/>
+        <constructor-arg ref="myView"/>
+    </bean>
+   
+</beans>

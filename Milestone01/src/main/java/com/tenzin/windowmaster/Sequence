@@ -1,0 +1,174 @@
+@startuml
+
+view --> controller 
+controller -> view : displayAllOrderBanner()
+controller -> view : getDateFromUser()
+controller -> service : getAllOrder()
+service -> service : validates Order
+service -> orderDao : getAllOrder()
+orderDao --> orderDao : loadOrder()
+orderDao -> service : List<FMOrder>
+service -> controller: List<FMOrder>
+controller-> view: displayOrderList()
+controller -> view: displayAllOrderSuccessBanner()
+view --> controller: void
+@enduml
+==============================================================
+@startuml
+title Flooring Master Display Order Sequence
+view --> controller
+controller -> view : displayAllOrderBanner()
+view --> controller: void
+controller -> view : getDateFromUser()
+view -> controller: LocalDate
+controller -> service : getAllOrder(LocalDate)
+service -> orderDao : getAllOrder(LocalDate)
+orderDao --> orderDao : loadOrder()
+orderDao -> service : List<FMOrder>
+service -> controller: List<FMOrder>
+controller-> view: displayOrderList(List<FMOrder>)
+view --> controller: void
+controller -> view: displayAllOrderSuccessBanner()
+view --> controller: void
+@enduml
+==============================================================
+@startuml
+
+title Flooring Master addOrder Sequence
+
+view --> controller
+controller-> view: getNewOrderInfo()
+view -> controller: FMOrder
+controller -> service: createOrder(FMOrder)
+service->service: validateOrder(FMOrder)
+service->service: performCalculation(FMOrder)
+service->controller: FMOrder
+controller->view: getApproval(FMOrder)
+view->controller: String
+controller->service: addOrder(FMOrder) 
+service->service: generateOrderNumber()
+service -> orderDao: addOrder(FMOrder)
+orderDao->service: FMOrder
+service->controller: FMOrder
+controller->view: displayAddSuccessBanner()
+view-->controller: void
+
+@enduml
+
+==============================================================
+
+@startuml
+
+title EditOrder Sequence Diagram
+view --> controller
+controller -> view: getOrderDate()
+view -> controller: LocalDate
+controller->view: getOrderNumber()
+view->controller: int
+controller->service: getSelectedOrder(LocalDate, int)
+service->orderDao: getSelectedOrder(LocalDate, int)
+orderDao->service: FMOrder
+service->controller: FMOrder
+controller->view: getEditOrderInfo(FMOrder)
+view->controller:FMOrder
+controller->service: editOrder(FMOrder)
+service->service: validateOrder(FMOrder)
+service->service: performCalculation(FMOrder)
+service->controller: FMOrder
+controller->view: getApproval(FMOrder)
+view->controller: FMOrder
+controller->service: editOrder(FMOrder)
+service->orderDao: editOrder(FMOrder)
+orderDao->service: FMOrder
+service->controller: FMOrder
+controller->view: displayEditSuccessBanner()
+view->controller: void
+
+@enduml
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+@startuml
+
+title EditOrder Sequence Diagram
+view --> controller
+controller -> view: getDateAndOrderNumber()
+view->controller: FMOrder
+controller->service: getSelectedOrder()
+service->orderDao: getSelectedOrder()
+orderDao->service: FMOrder
+service->controller: FMOrder
+controller->view: getEditOrderInfo()
+view->controller:FMOrder
+controller->service: editOrder()
+service->service: validateOrder()
+service->service: performCalculation()
+service->controller: FMOrder
+controller->view: getApproval(FMOrder)
+view->controller: FMOrder
+controller->service: addOrder()
+service->orderDao: addOrder()
+orderDao->service: FMOrder
+service->controller: FMOrder
+controller->view: displayEditSuccessBanner()
+view->controller: void
+
+@enduml
+
+=======================================================================
+@startuml
+
+title RemoveOrder Sequence Diagram
+
+view --> controller
+controller -> view: getOrderDate()
+view -> controller: LocalDate
+controller->view: getOrderNumber()
+view->controller: int
+controller->service: getSelectedOrder(LocalDate, int)
+service->orderDao: getSelectedOrder(LocalDate, int)
+orderDao->service: FMOrder
+service->controller: FMOrder
+controller->view: getApproval(FMOrder)
+view->controller:FMOrder
+controller->service: removeOrder(LocalDate, int)
+service->orderDao: removeOrder(LocalDate, int)
+orderDao->service: FMOrder
+service->controller: FMOrder
+controller->view: displayRemoveSuccessBanner()
+view->controller: void
+
+@enduml
+========================================================================
+
+@startuml
+title ExportData Sequence Diagram
+view->controller
+controller->service: exportAllData()
+service->orderDao: getAllOrders()
+orderDao-> service: List<FMOrder>
+service->exportDao: exportAllData(List<FMOrder>)
+exportDao->service: void
+service->controller: void
+controller->view: displayExportSuccessBanner()
+
+@enduml
+
+=========================================================================
+Narish
+
+class ExportFileDao{
+        +EXPORT_FILE: String
+        +DELIMITER: String
+
+        +ExportFileDao()
+        +ExportFileDao() {exportFileText: String}
+
+        -exportOrders(): void {activeOrders: List<Order>}
+        -marshallOrder(): String {anOrder: Order}
+    }
+
+    class OrderPersistenceException <<Exception>>{
+        OrderPersistenceException() {message: String}
+        OrderPersistenceException() {message: String, cause: Throwable}
+    }
+===========================================================================

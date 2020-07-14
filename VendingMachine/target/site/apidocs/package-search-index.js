@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.tenzin.vendingmachine"},{"l":"com.tenzin.vendingmachine.controller"},{"l":"com.tenzin.vendingmachine.dao"},{"l":"com.tenzin.vendingmachine.dto"},{"l":"com.tenzin.vendingmachine.service"},{"l":"com.tenzin.vendingmachine.ui"}]

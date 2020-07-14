@@ -1,0 +1,223 @@
+@startuml
+
+top to bottom direction
+
+package View{
+  class userInterface{
+    -io: UserIO
+    +displayErrorMessage(): void {errorMsg: String}
+    +displayExitBanner():void
+    +displayOrderList(): void {orderList: List<FMOrder>}
+    +displayOrderAvailableBanner(): void
+    +displayUnknownCommandBanner(): void
+    +printMenuAndGetSelection(): int
+    +addOrder(): void
+    +editOrder(): void
+    +removeOrder(): void
+    +exportAllData(): void
+    +getDateFromUser(): String
+    +getCustomerName(): String
+    +getOrderNumber(): String
+    +getState(): String
+    +getProductTypeAndPrice(): String
+    +getArea(): long
+    +displayOrderSummary(): void
+    +displayOrderSuccessful(): void
+  }
+  interface UserIO{
+  
+  }
+  UserIO <|-down- UserIOConsoleImpl: Implements
+  userInterface *-down- UserIO: Composition
+  
+}
+package Controller{
+FMController o--|> userInterface
+  class FMController{
+    -view: FMView
+    -service: FMService;
+    +run(): void
+    -getMenuSelection: int
+    -displayOrders(): void 
+    -editOrder(): void
+    -addOrder(): void
+    -removeOrder(): void
+    -exportAllData(): void
+    -unknownCommand(): void
+    -exitMessage(): void
+  }
+}
+package Service{
+
+  FMController o--|> FMService: Composition
+  interface FMService{
+    +getAllOrders(): List <FMOrder> {orderDate: LocalDate}
+    +addOrder(): FMOrder {order: FMOrder}
+    +getSelectedOrder(): FMOrder {orderNumber: int}
+    +removeOrder():void {orderNumber: int}
+    +editOrder(): void {order: FMOrder}
+    +performCalculation(): FMOrder {order: FMOrder}
+    +generateOrderNumber(): int
+    +validateOrder(): void
+  }
+  class FMServiceImpl{
+  +auditDao: FMOrderAuditDao
+  +dao: FMOrderDaop
+  +getAllOrders(): List<FMOrder> {orderDate: LocalDate}
+  
+  }
+  class FMOrderValidationException{
+  }
+  class FMProductValidationException{
+  }
+  class FMTaxValidationException{
+  }
+  class FMInvalidOrderNumberException{
+  }
+  
+ FMServiceImpl -up-|> FMService: Implements
+ FMOrderValidationException -up-|> Exception: Extends
+ FMProductValidationException -up-|> Exception: Extends
+ FMTaxValidationException -up-|> Exception : Extends
+ FMInvalidOrderNumberException -up-|> Exception: Extends
+  
+}
+
+package DAO{
+	FMServiceImpl o--|> FMOrderDao
+	FMServiceImpl o--|> FMOrderAuditDao
+    FMServiceImpl o--|> FMProductDao
+    FMServiceImpl o--|> FMTaxDao
+    FMServiceImpl o--|> FMExportDao
+  interface FMOrderDao{
+    +addOrder(): FMOrder {order: FMOrder}
+    +getAllOrders(): List<FMOrder> {orderDate: LocalDate}
+    +getSelectedOrder(): FMOrder {orderNumber: int, orderDate : LocalDate}
+    +getEveryOrder(): List<FMOrder>
+    +removeOrder(): FMOrder {orderDate: LocalDate, orderNumber: int}
+    +editOrder(): FMOrder {order: FMOrder}
+}
+
+  class FMOrderDaoFileImpl <FMOrderDao>{
+     +DELIMITER: String
+    -ORDER_DATA_FOLDER: String
+    -ORDER_DATA_FILE: String
+    -orderMap: Map<LocalDate,Map<Integer,FMOrder>>
+    -writeOrderData(): void
+    -loadOrderData(): void
+    -marshallOrder(): String {anOrder: FMOrder}
+    -unmarshallOrder(): FMOrder {orderAsText: String} 
+  }
+  interface FMTaxDao{
+    +addTax(): FMTax {tax: FMTax}
+    +getTax(): FMTax {stateName: String}
+    +getAllTax(): List<FMTax> {stateAbbreviation: FMTax}
+    +updateTax(): FMTax{tax: FMTax}
+    +removeTax(): FMTax {tax: FMTax}
+  }
+  class FMTaxDaoFileImpl{
+    +DELIMITER: String
+    +DATA_FOLDER: String
+    -TAX_FILE: String
+    -taxMap: Map<String, FMTax>
+    +loadTaxData(): void
+    +unmarshallTaxData(): FMTax {taxAsText: String}
+  }
+  
+  interface FMProductDao{
+    +addProduct(): FMProduct {product: FMProduct}
+    +getProduct(): FMProduct {productType: String}
+    +getAllProduct(): List<FMProduct> {productType: FMProduct}
+    +updateProduct(): FMProduct {product: FMProduct}
+    +removeProduct(): FMProduct {product: FMProduct}
+  }
+  class FMProductDaoFileImpl{
+    +DELIMITER: String
+    +DATA_FOLDER:String
+    -PRODUCT_FILE: String
+    -productMap: Map<String, FMProduct>
+    +loadProductData(): void
+    +unmarshallProductData(): FMProduct {productAsText: String}
+  }
+  interface FMExportDao{
+    +backUpOrder(): void {orderList: List<FMOrder>}
+  }
+  class FMExportDaoImpl{
+    +DELIMITER: String
+    -EXPORT_DATAFILE: String
+    -marshallOrder(): String {anOrder: FMOrder}
+  }
+  interface FMOrderAuditDao{
+  
+    +writeAuditEntry(): void {String entry}
+    
+  }
+  
+  class FMOrderAuditDaoImpl<FMOrderAuditDao>{
+    +AUDIT_FILE: String
+    +writeAuditEntry(): void {String entry}
+  }
+  
+  class FMPersistenceException{
+  }
+  
+  FMOrderDao <|-down- FMOrderDaoFileImpl: Implements
+  FMOrderAuditDao <|-down- FMOrderAuditDaoImpl: Implements
+  FMTaxDao <|-down- FMTaxDaoFileImpl: Implements
+  FMProductDao <|-down- FMProductDaoFileImpl: Implements
+  FMExportDao <|-down- FMExportDaoImpl: Implements
+  FMPersistenceException -up-|> Exception: Extends
+    
+}
+package DTO{
+    
+  class FMOrder{
+	-orderDate: LocalDate
+    -orderNumber: int
+    -customerName: String
+    -area: BigDecimal
+    -materialCost: BigDecimal
+    -laborCost: BigDecimal
+    -tax: BigDecimal
+    -total: BigDecimal
+    -taxInfo: FMTax
+    -products: FMProduct
+Constructor 
+	+getOrderDate(): LocalDate
+    +getOrderNumber(): int
+    +getCustomerName(): String
+    +setCustomerName(): void {customerName: String}
+    +getArea(): BigDecimal
+    +setArea(): void {area: BigDecimal}
+    +getMaterialCost(): BigDecimal
+    +setMaterialCost(): void {materialCost : BigDecimal}
+    +getLaborCost(): BigDecimal
+    +setLaborCost(): void {laborCost: BigDecimal}
+    +getTax(): BigDecimal
+    +setTax(): void {tax: BigDecimal}
+    +getTotal(): BigDecimal
+    +setTotal(): void {total: BigDecimal}
+    +getTaxInfo(): FMTax
+    +getProduct(): Product
+  }
+  class FMProduct{
+    +productType: String
+    +costPerSquareFoot: BigDecimal
+    +laborCostPerSquareFoot: BigDecimal
+    Constructor
+    +getProductType(): String
+    +getCostPerSquareFoot(): BigDecimal
+    +getLaborCostPerSquareFoot(): BigDecimal
+  }
+  
+  class FMTax{
+    +stateAbbreviation: String
+    +stateName: String
+    +taxRate: BigDecimal
+    Constructor
+    +getStateAbbreviation(): String
+    +getStateName(): String
+    +getTaxRate(): BigDecimal
+  }
+}
+@enduml
